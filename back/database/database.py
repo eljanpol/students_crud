@@ -7,7 +7,7 @@ user = "root"
 password = "root"
 host = "localhost"
 port = 3306
-db_name = ""
+db_name = "students"
 
 connection = pymysql.connect(
     user=user,
@@ -30,6 +30,10 @@ class Table(Model):
 
 
 class Role(Table):
+    name = CharField()
+
+
+class Subject(Table):
     name = CharField()
 
 
