@@ -1,5 +1,4 @@
-import peewee
-from peewee import Model, CharField, MySQLDatabase, AutoField, ForeignKeyField
+from peewee import Model, CharField, MySQLDatabase, AutoField, ForeignKeyField, IntegerField
 import pymysql
 
 
@@ -43,21 +42,54 @@ class User(Table):
     password = CharField()
 
 
+class UserSubjects(Table):
+    subject_id = ForeignKeyField(Subject)
+    user_id = ForeignKeyField(User)
+    grade = IntegerField()
+
+
 def test_data():
     _ = Role.get_or_create(
         name="admin"
     )
 
+    _ = Role.get_or_create(
+        name="student"
+    )
+
+    _ = Role.get_or_create(
+        name="teacher"
+    )
+
     _ = User.get_or_create(
-        name="User1",
-        role=1
+        name="admin",
+        role=1,
+        password="admin"
+    )
+
+    _ = User.get_or_create(
+        name="user1",
+        role=2,
+        password="123"
+    )
+
+    _ = Subject.get_or_create(
+        name="Math"
+    )
+
+    _ = UserSubjects.get_or_create(
+        user_id=1,
+        subject_id=1,
+        grade=4
     )
 
 
 if __name__ == "__main__":
     db.create_tables([
         Role,
-        User
+        User,
+        Subject,
+        UserSubjects
     ])
 
     test_data()
