@@ -1,54 +1,36 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body, Depends
 import fastapi
+from uvicorn import run
+from fastapi.security import OAuth2PasswordRequestForm
 from playhouse.shortcuts import model_to_dict
 
-from back.database.database import User, Role, UserSubjects, Subject
+from back.api.interfaces import user, subjects
+from back.api.jwt_token import get_jwt, get_user, key
+from back.api.hasher import verify_hash
+from back.database.database import User
 
 
 app = FastAPI()
 
 
-@app.get("/users")
-def get_users():
-    return [model_to_dict(i) for i in User.select()]
+@app.post("/token")
+async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+    user = User.get_or_none(name=form_data.username)
+
+    if not user:
+        raise HTTPException(status_code=400, detail="invalid name")
+
+    user = model_to_dict(user)
+
+    if verify_hash(form_data.password, user["password"]):
+        return {"access_token": get_jwt(user, key)}
+
+    raise HTTPException(status_code=400, detail="invalid password")
 
 
-@app.get("/subjects")
-def add_subject():
-    return [model_to_dict(i) for i in Subject.select()]
+app.include_router(user.router)
+app.include_router(subjects.router)
 
 
-@app.get("/users/{id}/subjects")
-def get_users_subjects(id: int):
-    user = User.get_or_none(id=id)
-
-    if str(user.role) == "2":
-        return [model_to_dict(i) for i in UserSubjects.select().where(UserSubjects.user_id == user.id)]
-
-    else:
-        raise HTTPException(400, "Incorrect User role. User must be a Student")
-
-
-@app.post("/users")
-def register(username: str, password: str):
-    user, _ = User.get_or_create(
-        name=username,
-        password=password,
-        role=2
-    )
-
-    return model_to_dict(user)
-
-
-@app.post("/subjects")
-def create_subject(name: str):
-    subject, _ = Subject.get_or_create(
-        name=name
-    )
-
-    return model_to_dict(subject)
-
-
-@app.post("users/{user_id}/subjects/{subject_id}/{grade}")
-def create_user_grade(user_id: int, subject_id: int, grade):
-    pass
+if __name__ == "__main__":
+    run("back.api.rest_api:app", host="0.0.0.0", port=8000, reload=True)

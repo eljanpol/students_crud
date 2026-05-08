@@ -1,5 +1,7 @@
-from peewee import Model, CharField, MySQLDatabase, AutoField, ForeignKeyField, IntegerField
+from peewee import Model, CharField, MySQLDatabase, AutoField, ForeignKeyField, IntegerField, DateTimeField
 import pymysql
+
+from back.api.hasher import hash_password
 
 
 user = "root"
@@ -46,6 +48,7 @@ class UserSubjects(Table):
     subject_id = ForeignKeyField(Subject)
     user_id = ForeignKeyField(User)
     grade = IntegerField()
+    date = DateTimeField()
 
 
 def test_data():
@@ -64,13 +67,13 @@ def test_data():
     _ = User.get_or_create(
         name="admin",
         role=1,
-        password="admin"
+        password=hash_password("admin")
     )
 
     _ = User.get_or_create(
         name="user1",
         role=2,
-        password="123"
+        password=hash_password("123")
     )
 
     _ = Subject.get_or_create(
@@ -80,7 +83,8 @@ def test_data():
     _ = UserSubjects.get_or_create(
         user_id=1,
         subject_id=1,
-        grade=4
+        grade=4,
+        date="2026-05-05 10:20:52"
     )
 
 
