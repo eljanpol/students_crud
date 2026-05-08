@@ -23,14 +23,23 @@ async def register(username: str, password: str):
 
 @router.get("")
 async def get_users(current_user = Depends(auf_token)):
-    return [model_to_dict(i) for i in User.select()]
+    user = get_user(current_user, key)
+
+    if user.role.name in ["admin", "teacher"]:
+        return [model_to_dict(i) for i in User.select()]
+
+    else:
+        raise HTTPException(400, "Incorrect User role. User must be a Admin")
 
 
 @router.get("/{id}/subjects")
 async def get_users_grades(id: int, current_user = Depends(auf_token)):
     user = User.get_or_none(id=id)
 
-    if str(user.role) == "2":
+    if not user:
+        raise HTTPException(404, "User not found")
+
+    if user.role.name == "teacher":
         return [model_to_dict(i) for i in UserSubjects.select().where(UserSubjects.user_id == user.id)]
 
     else:
@@ -39,10 +48,21 @@ async def get_users_grades(id: int, current_user = Depends(auf_token)):
 
 @router.post("/{user_id}/grades")
 async def create_user_grade(user_id: int, subject_id: int, grade: int, created_at: str, current_user = Depends(auf_token)):
+    current_user = get_user(current_user, key)
+
+    if current_user.role.name != "teacher":
+        raise HTTPException(400, "Incorrect User role. User must be a Teacher")
+
     user = User.get_or_none(id=user_id)
     subject = Subject.get_or_none(id=subject_id)
 
-    if str(user.role) != "2":
+    if not user:
+        raise HTTPException(404, "User not found")
+    
+    if not subject:
+        raise HTTPException(404, "Subject not found")
+
+    if user.role.name == "student":
         raise HTTPException(400, "Incorrect User role. User must be a Student")
 
     grade, _ = UserSubjects.get_or_create(
@@ -57,7 +77,15 @@ async def create_user_grade(user_id: int, subject_id: int, grade: int, created_a
 
 @router.patch("/{user_id}")
 async def change_role(user_id: int, role_id: int, current_user = Depends(auf_token)):
+    current_user = get_user(current_user, key)
+
+    if current_user.role.name != "admin":
+        raise HTTPException(400, "Incorrect User role. User must be a Admin")
+
     user = User.get_or_none(id=user_id)
+
+    if not user:
+        raise HTTPException(404, "User not found")
 
     user.role = role_id
     user.save()

@@ -1,6 +1,8 @@
 from peewee import Model, CharField, MySQLDatabase, AutoField, ForeignKeyField, IntegerField, DateTimeField
 import pymysql
 
+from back.api.hasher import hash_password
+
 
 user = "root"
 password = "root"
@@ -65,13 +67,13 @@ def test_data():
     _ = User.get_or_create(
         name="admin",
         role=1,
-        password="admin"
+        password=hash_password("admin")
     )
 
     _ = User.get_or_create(
         name="user1",
         role=2,
-        password="123"
+        password=hash_password("123")
     )
 
     _ = Subject.get_or_create(

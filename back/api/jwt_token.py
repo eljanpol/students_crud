@@ -15,7 +15,9 @@ def get_jwt(user: dict, key: str):
 
 
 def get_user(token: str, key: str):
-    return jwt.decode(token, key=key, algorithms="HS256")
+    user_dict = jwt.decode(token, key=key, algorithms="HS256")
+
+    return User.get_or_none(id=user_dict["id"])
 
 
 async def get_current_user(name: str = Depends(auf_token)):
