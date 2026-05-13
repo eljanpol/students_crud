@@ -1,14 +1,33 @@
 import { useState } from "react";
+import { BrowserRouter, Routes, Route, useNavigate, Outlet } from "react-router-dom"
+import { LoginPage } from "./login-page";
+import { RegisterPage } from "./register-page";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
-
+import { HomePage } from "./home-page";
 
 export const App = () => {
-    let [value, setValue] = useState<number>(1)
+    
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="main" element={<MainLayout/>}>
+                    <Route path="login" element={<LoginPage/>}/>
+                    <Route path="register" element={<RegisterPage/>}/>
+                    <Route path="home" element={<HomePage/>}/>
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    )
+}
+
+const MainLayout = () => {
+    const navigate = useNavigate()
     return (
         <>
-        <Button className="w-100 h-20 "  onClick={() => {}}>Button {value} </Button>
-        <Input className=""/>
+            <Button onClick={() => navigate("login")}/>
+            <Button onClick={() => navigate("register")}/>
+            <Button onClick={() => navigate("home")}/>
+            <Outlet/>
         </>
     )
 }
