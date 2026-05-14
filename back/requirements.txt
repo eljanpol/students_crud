@@ -1,7 +1,16 @@
+<<<<<<< HEAD
 peewee
 pymysql
 fastapi
 uvicorn
 pyjwt
 bcrypt
+=======
+peewee
+pymysql
+fastapi
+uvicorn
+pyjwt
+bcrypt
+>>>>>>> c017897c6df3e233718c80e7927385cbfb2cb6e7
 python-multipart
