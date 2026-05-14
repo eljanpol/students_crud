@@ -24,13 +24,13 @@ const MainLayout = () => {
     const navigate = useNavigate()
     return (
         <>  
-            <div className="bg-[#141B21]">
-                <Button className="bg-[#505050]" onClick={() => navigate("login")}>Вход</Button>
-                <Button className="bg-[#505050]" onClick={() => navigate("register")}>Регистрация</Button>
-                <Button className="bg-[#505050]" onClick={() => navigate("home")}>Домой, Волтер</Button>
+            <div className="bg-[#0B0B0B]">
+                <Button className="bg-[#ffffff] text-[#0B0B0B]" onClick={() => navigate("login")}>Вход</Button>
+                <Button className="bg-[#ffffff] text-[#0B0B0B]" onClick={() => navigate("register")}>Регистрация</Button>
+                <Button className="bg-[#ffffff] text-[#0B0B0B]" onClick={() => navigate("home")}>Домой, Волтер</Button>
                 <Outlet/>
             </div>
-            <body className="bg-[#1D262C]"/>
+            <body className="bg-[#0B0B0B]"/>
         </>
     )
 }
