@@ -6,7 +6,6 @@ import { Button } from "../components/ui/button";
 import { HomePage } from "./home-page";
 
 export const App = () => {
-    
     return (
         <BrowserRouter>
             <Routes>
