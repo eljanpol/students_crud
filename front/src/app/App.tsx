@@ -23,11 +23,14 @@ export const App = () => {
 const MainLayout = () => {
     const navigate = useNavigate()
     return (
-        <>
-            <Button onClick={() => navigate("login")}/>
-            <Button onClick={() => navigate("register")}/>
-            <Button onClick={() => navigate("home")}/>
-            <Outlet/>
+        <>  
+            <div className="bg-[#141B21]">
+                <Button className="bg-[#505050]" onClick={() => navigate("login")}>Вход</Button>
+                <Button className="bg-[#505050]" onClick={() => navigate("register")}>Регистрация</Button>
+                <Button className="bg-[#505050]" onClick={() => navigate("home")}>Домой, Волтер</Button>
+                <Outlet/>
+            </div>
+            <body className="bg-[#1D262C]"/>
         </>
     )
 }

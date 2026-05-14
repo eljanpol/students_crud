@@ -1,7 +1,7 @@
 export const RegisterPage = () => {
     return(
         <div>
-            Страница регистрации
+            <h1 className = "text-[#ffffff]">Страница регистрации</h1>
         </div>
     )
 }
