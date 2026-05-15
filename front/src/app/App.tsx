@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route, useNavigate, Outlet } from "react-router-dom"
 import { LoginPage } from "./login-page";
 import { RegisterPage } from "./register-page";
@@ -29,7 +28,7 @@ const MainLayout = () => {
                 <Button className="bg-[#ffffff] text-[#0B0B0B]" onClick={() => navigate("home")}>Домой, Волтер</Button>
                 <Outlet/>
             </div>
-            <body className="bg-[#0B0B0B]"/>
+            <div className="bg-[#0B0B0B]"/>
         </>
     )
 }
