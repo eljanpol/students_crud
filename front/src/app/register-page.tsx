@@ -21,21 +21,21 @@ const useRegisterPageVM  = () => {
             login: register('login', {
                 required: {
                     value: true, 
-                    message: "это поле обязательно"
+                    message: "Это поле обязательно!"
                 }
             }),
             password: register('password', {
                 required: {
                     value: true, 
-                    message: "это поле обязательно"
+                    message: "Это поле обязательно!"
                 }
             }),
             repeatPassword: register('repeatPassword', {
                 required: {
                     value: true,
-                    message: "это поле обязательно"
+                    message: "Это поле обязательно!"
                 },
-                validate: (value) => getValues('password') === value || "пароли должны совпадать"
+                validate: (value) => getValues('password') === value || "Пароли должны совпадать!"
             })
         },
         onSubmit,
@@ -53,7 +53,6 @@ export const RegisterPage = () => {
             <form className="w-80 flex flex-col gap-4" onSubmit={onSubmit}>    
                 <h1 className="text-[#ffffff] text-center text-xl font-medium">Регистрация</h1>
                 <h1 className="text-[#676767] text-center">Введите код роли и придумайте себе логин и пароль:</h1>
-
 
                 <Input 
                 className={clsx(
@@ -79,10 +78,18 @@ export const RegisterPage = () => {
                 <ErrorMessage error={errors.repeatPassword} />
 
                 <div className="flex gap-3 mt-2">
-                    <Button  type="submit"  className="flex-2 h-12 text-[15px] bg-[#ffffff] text-[#0B0B0B] hover:bg-[#bdbdbd] rounded-xl transition-colors" 
-                    onClick={() => {}}>Зарегистрироваться</Button>
-                    <Button type='button' className="flex-1 h-12 text-[15px] bg-[#1F1F1F] text-white hover:bg-[#282828] rounded-xl transition-colors" 
-                    onClick={() => navigate("/main/login")}>Вход</Button>
+                    <Button  
+                    type="submit"  className="flex-2 h-12 text-[15px] bg-[#ffffff] text-[#0B0B0B] hover:bg-[#bdbdbd] rounded-xl transition-colors" 
+                    onClick={() => {}}
+                    >
+                        Зарегистрироваться
+                    </Button>
+                    <Button 
+                    type='button' className="flex-1 h-12 text-[15px] bg-[#1F1F1F] text-white hover:bg-[#282828] rounded-xl transition-colors" 
+                    onClick={() => navigate("/main/login")}
+                    >
+                        Вход
+                    </Button>
                 </div>
             </form>
         </div>
