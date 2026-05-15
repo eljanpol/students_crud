@@ -11,7 +11,7 @@ type AuthForm = {
 }
 
 const useRegisterPageVM  = () => {
-    const {register, handleSubmit, formState: {errors}, getValues} = useForm<AuthForm>()
+    const {register, handleSubmit, formState: {errors}} = useForm<AuthForm>()
     
     const onSubmit = handleSubmit((data) => console.log(data))
 
@@ -41,7 +41,7 @@ export const LoginPage = () => {
 
     return (
         <div className="relative min-h-screen w-full bg-[#0B0B0B] flex items-center justify-center pb-50">
-            <form className="w-80 flex flex-col gap-4" onSubmit={onSubmit}>    
+            <form className="rounded-2xl p-5 bg-[#ffffff07] w-90 flex flex-col gap-4" onSubmit={onSubmit}>    
                 <h1 className="text-[#ffffff] text-center text-xl font-medium">Авторизация</h1>
                 <h1 className="text-[#676767] text-center">Введите свой логин и пароль:</h1>
 

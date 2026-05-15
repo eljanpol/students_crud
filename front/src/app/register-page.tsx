@@ -50,7 +50,7 @@ export const RegisterPage = () => {
 
     return (
         <div className="relative min-h-screen w-full bg-[#0B0B0B] flex items-center justify-center pb-50">
-            <form className="w-80 flex flex-col gap-4" onSubmit={onSubmit}>    
+            <form className="rounded-2xl p-5 bg-[#ffffff07] w-90 flex flex-col gap-4" onSubmit={onSubmit}>      
                 <h1 className="text-[#ffffff] text-center text-xl font-medium">Регистрация</h1>
                 <h1 className="text-[#676767] text-center">Введите код роли и придумайте себе логин и пароль:</h1>
 
