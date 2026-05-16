@@ -38,7 +38,7 @@ export const HomePage = () => {
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
+                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/admin")}>Админ-панель</Button>
                 </div>
 
                 <div className="border rounded-2xl border-zinc-700 flex flex-col justify-start py-12 px-6 h-159 overflow-y-auto">

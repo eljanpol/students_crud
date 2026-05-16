@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useNavigate, Outlet, Navigate } from "rea
 import { LoginPage } from "./login-page";
 import { RegisterPage } from "./register-page";
 import { HomePage } from "./home-page";
+import { AdminPage } from "./admin-page";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const client = new QueryClient()
@@ -15,6 +16,7 @@ export const App = () => {
                         <Route path="login" element={<LoginPage/>}/>
                         <Route path="register" element={<RegisterPage/>}/>
                         <Route path="home" element={<HomePage/>}/>
+                        <Route path="admin" element={<AdminPage/>}/>
                     </Route>
                     <Route path="*" element={<Navigate to="/main/login" replace />} />
                 </Routes>
