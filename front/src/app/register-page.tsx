@@ -4,6 +4,7 @@ import { Button } from "../components/ui/button";
 import {useForm} from 'react-hook-form'
 import clsx from "clsx";
 import { ErrorMessage } from "../components/ui/error-message";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 type AuthForm = {
     login: string,
@@ -11,10 +12,22 @@ type AuthForm = {
     repeatPassword: string
 }
 
+type RegisterUserDTO = {
+    username: string,
+    password: string
+}
+
 const useRegisterPageVM  = () => {
     const {register, handleSubmit, formState: {errors}, getValues} = useForm<AuthForm>()
     
-    const onSubmit = handleSubmit((data) => console.log(data))
+    const onSubmit = handleSubmit(({password, login}) => mutate({username: login, password}))
+
+    const {mutate, isLoading} = useMutation({
+        mutationFn: ({username, password}: RegisterUserDTO) =>
+            fetch(`http://localhost:8000/users?username=${username}&password=${password}`, {method: "POST"})
+                .then(req => req.json())
+                .then((token: string) => sessionStorage.setItem('access', token)),
+    })
 
     return {
         fields: {
