@@ -18,7 +18,7 @@ async def register(username: str, password: str):
         role=2
     )
 
-    return get_jwt({"username": user.name}, key)
+    return get_jwt(model_to_dict(user), key)
 
 
 @router.get("")
