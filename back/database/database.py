@@ -1,11 +1,27 @@
-from peewee import Model, CharField, MySQLDatabase, AutoField, ForeignKeyField, IntegerField, DateTimeField, SqliteDatabase
-import pymysql
+from peewee import Model, CharField, SqliteDatabase, AutoField, ForeignKeyField, IntegerField, DateTimeField
+# import pymysql
 
 from back.api.hasher import hash_password
 
-db = SqliteDatabase(
-    "Pipisi.db"
-)
+
+# user = "root"
+# password = "1234_8765"
+# host = "localhost"
+# port = 3306
+# db_name = "students"
+
+# # connection = pymysql.connect(
+# #     user=user,
+# #     password=password,
+# #     database=db_name)
+
+# # db = MySQLDatabase(
+# #     db_name,
+# #     password=password,
+# #     user=user,
+# #     host=host,
+# #     port=port)
+db = SqliteDatabase("back/database/database.db")
 
 
 class Table(Model):

@@ -37,7 +37,7 @@ export const HomePage = () => {
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
+                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GradeSet")}>Форма выставления оценок</Button>
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/admin")}>Админ-панель</Button>
                 </div>
 

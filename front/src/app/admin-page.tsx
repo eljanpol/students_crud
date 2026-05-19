@@ -25,8 +25,8 @@ export const AdminPage = () => {
                 <Button onClick={() => navigate("/main/home")} className="h-11 bg-[#222222] hover:bg-[#303030]">Назад</Button>
             </div>
 
-            <div className="overflow-hidden relative min-h-screen w-full flex items-top justify-center">
-                <div className="relative rounded-2xl bg-[#111111] h-190 w-120 flex flex-col gap-4 items-center justify-start ">
+            <div className="overflow-hidden relative min-h-120 w-full flex items-top justify-center">
+                <div className="relative rounded-2xl bg-[#111111] h-120 w-120 flex flex-col gap-4 items-center justify-start ">
                     <h1 className="text-white pt-5 text-xl font-bold translate-y-5">Выберите, кого хотите назначить:</h1>
 
                     <Input 

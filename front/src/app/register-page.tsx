@@ -4,7 +4,9 @@ import { Button } from "../components/ui/button";
 import {useForm} from 'react-hook-form'
 import clsx from "clsx";
 import { ErrorMessage } from "../components/ui/error-message";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {  } from "react-query";
+import { fetchWithBearer, setBearer } from "../lib/api";
+import { useUserStore } from "./user-stor";
 
 type AuthForm = {
     login: string,
@@ -20,14 +22,20 @@ type RegisterUserDTO = {
 const useRegisterPageVM  = () => {
     const {register, handleSubmit, formState: {errors}, getValues} = useForm<AuthForm>()
     
-    const onSubmit = handleSubmit(({password, login}) => mutate({username: login, password}))
+    const userStore = useUserStore()
 
-    const {mutate, isLoading} = useMutation({
-        mutationFn: ({username, password}: RegisterUserDTO) =>
-            fetch(`http://localhost:8000/users?username=${username}&password=${password}`, {method: "POST"})
+    const onSubmit = handleSubmit(({password, login}) => registerQuery({username: login, password}))
+
+
+    const registerQuery = ({username, password}: RegisterUserDTO) =>
+            fetchWithBearer(`http://localhost:8000/users?username=${username}&password=${password}`, {method: "POST"})
                 .then(req => req.json())
-                .then((token: string) => sessionStorage.setItem('access', token)),
-    })
+                .then((token: string) => setBearer(token))
+                .then(() => {
+                    fetchWithBearer("http://localhost:8000/users/me")
+                    .then(req => req.json())
+                    .then(user => userStore.setUser(user))
+                })
 
     return {
         fields: {

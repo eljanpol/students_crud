@@ -3,6 +3,7 @@ import { LoginPage } from "./login-page";
 import { RegisterPage } from "./register-page";
 import { HomePage } from "./home-page";
 import { AdminPage } from "./admin-page";
+import { SetGradePage } from "./set-grade-page";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const client = new QueryClient()
@@ -13,6 +14,7 @@ export const App = () => {
             <BrowserRouter>
                 <Routes>
                     <Route path="main" element={<MainLayout/>}>
+                        <Route path="GradeSet" element={<SetGradePage/>}/>
                         <Route path="login" element={<LoginPage/>}/>
                         <Route path="register" element={<RegisterPage/>}/>
                         <Route path="home" element={<HomePage/>}/>

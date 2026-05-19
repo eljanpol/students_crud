@@ -7,7 +7,7 @@ from back.database.database import User
 
 
 auf_token = OAuth2PasswordBearer(tokenUrl="token")
-key = "pipisi"
+key = "QDRDDoV7TZE0MrJmsL2PmV853ZE7luZZpD27TnU9Gnq1nZOcbiNGxtmdUIzjn3QPYfBBMbk1yGl9xZTpl3TqfCsSGL7o3ZjXKaqc1OiS7eilQKCAnquvaTP9XYGCFswe"
 
 
 def get_jwt(user: dict, key: str):

@@ -12,42 +12,49 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 @router.post("")
 async def register(username: str, password: str):
+    if username in [model_to_dict(i)["name"] for i in User.select()]:
+        raise HTTPException(400, "User already registered")
+
     user, _ = User.get_or_create(
         name=username,
         password=hash_password(password),
         role=2
     )
 
-    return get_jwt(model_to_dict(user), key)
+    return bool(user)
+
+
+@router.get("/me")
+async def get_me(current_user=Depends(auf_token)):
+    return get_user(current_user, key)
 
 
 @router.get("")
-async def get_users(current_user = Depends(auf_token)):
+async def get_users(current_user=Depends(auf_token)):
     user = get_user(current_user, key)
 
     if user.role.name in ["admin", "teacher"]:
         return [model_to_dict(i) for i in User.select()]
 
-    else:
-        raise HTTPException(400, "Incorrect User role. User must be a Admin")
+    raise HTTPException(400, "Incorrect User role. User must be a Admin")
 
 
 @router.get("/{id}/subjects")
-async def get_users_grades(id: int, current_user = Depends(auf_token)):
+async def get_users_grades(id: int, current_user=Depends(auf_token)):
     user = User.get_or_none(id=id)
 
     if not user:
         raise HTTPException(404, "User not found")
 
-    if user.role.name == "teacher":
+    if user.role.name == "student":
         return [model_to_dict(i) for i in UserSubjects.select().where(UserSubjects.user_id == user.id)]
 
     else:
-        raise HTTPException(400, "Incorrect User role. User must be a Student")
+        raise HTTPException(400, "Incorrect User role. User must be a student")
 
 
 @router.post("/{user_id}/grades")
-async def create_user_grade(user_id: int, subject_id: int, grade: int, created_at: str, current_user = Depends(auf_token)):
+async def create_user_grade(user_id: int, subject_id: int, grade: int, created_at: str, current_user=Depends(auf_token)):
     current_user = get_user(current_user, key)
 
     if current_user.role.name != "teacher":
@@ -58,11 +65,11 @@ async def create_user_grade(user_id: int, subject_id: int, grade: int, created_a
 
     if not user:
         raise HTTPException(404, "User not found")
-    
+
     if not subject:
         raise HTTPException(404, "Subject not found")
 
-    if user.role.name == "student":
+    if user.role.name != "student":
         raise HTTPException(400, "Incorrect User role. User must be a Student")
 
     grade, _ = UserSubjects.get_or_create(
@@ -76,7 +83,7 @@ async def create_user_grade(user_id: int, subject_id: int, grade: int, created_a
 
 
 @router.patch("/{user_id}")
-async def change_role(user_id: int, role_id: int, current_user = Depends(auf_token)):
+async def change_role(user_id: int, role_id: int, current_user=Depends(auf_token)):
     current_user = get_user(current_user, key)
 
     if current_user.role.name != "admin":
