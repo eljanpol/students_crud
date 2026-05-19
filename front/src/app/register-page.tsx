@@ -27,15 +27,23 @@ const useRegisterPageVM  = () => {
     const onSubmit = handleSubmit(({password, login}) => registerQuery({username: login, password}))
 
 
-    const registerQuery = ({username, password}: RegisterUserDTO) =>
-            fetchWithBearer(`http://localhost:8000/users?username=${username}&password=${password}`, {method: "POST"})
-                .then(req => req.json())
-                .then((token: string) => setBearer(token))
-                .then(() => {
-                    fetchWithBearer("http://localhost:8000/users/me")
-                    .then(req => req.json())
-                    .then(user => userStore.setUser(user))
-                })
+    const registerQuery = ({ username, password }: RegisterUserDTO) =>
+        fetchWithBearer("http://localhost:8000/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username, password })
+        })
+        .then(res => {
+            if (!res.ok) throw new Error("Ошибка регистрации");
+            return res.json();
+        })
+        .then((data) => {
+            console.log("Успешная регистрация!", data);
+            // Здесь логика после регистрации (например, редирект на логин)
+        })
+        .catch(err => console.error(err));
 
     return {
         fields: {

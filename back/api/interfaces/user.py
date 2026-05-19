@@ -1,6 +1,9 @@
 from fastapi import APIRouter, HTTPException, Body, Depends
 from playhouse.shortcuts import model_to_dict
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import date
 
 from back.database.database import User, UserSubjects, Subject
 from back.api.hasher import verify_hash, hash_password
@@ -10,14 +13,29 @@ from back.api.jwt_token import get_jwt, get_user, key, auf_token
 router = APIRouter(prefix="/users", tags=["users"])
 
 
+class UserRegister(BaseModel):
+    username: str = Field(..., min_length=3, max_length=50)
+    password: str = Field(..., min_length=6)
+
+
+class UserGradeCreate(BaseModel):
+    subject_id: int
+    grade: int = Field(..., ge=1, le=100)
+    created_at: str
+
+
+class UserRoleUpdate(BaseModel):
+    role_id: int
+
+
 @router.post("")
-async def register(username: str, password: str):
-    if username in [model_to_dict(i)["name"] for i in User.select()]:
+async def register(user_data: UserRegister):
+    if user_data.username in [model_to_dict(i)["name"] for i in User.select()]:
         raise HTTPException(400, "User already registered")
 
     user, _ = User.get_or_create(
-        name=username,
-        password=hash_password(password),
+        name=user_data.username,
+        password=hash_password(user_data.password),
         role=2
     )
 
@@ -54,14 +72,18 @@ async def get_users_grades(id: int, current_user=Depends(auf_token)):
 
 
 @router.post("/{user_id}/grades")
-async def create_user_grade(user_id: int, subject_id: int, grade: int, created_at: str, current_user=Depends(auf_token)):
+async def create_user_grade(
+    user_id: int, 
+    grade_data: UserGradeCreate,
+    current_user=Depends(auf_token)
+):
     current_user = get_user(current_user, key)
 
     if current_user.role.name != "teacher":
         raise HTTPException(400, "Incorrect User role. User must be a Teacher")
 
     user = User.get_or_none(id=user_id)
-    subject = Subject.get_or_none(id=subject_id)
+    subject = Subject.get_or_none(id=grade_data.subject_id)
 
     if not user:
         raise HTTPException(404, "User not found")
@@ -75,15 +97,19 @@ async def create_user_grade(user_id: int, subject_id: int, grade: int, created_a
     grade, _ = UserSubjects.get_or_create(
         user_id=user,
         subject_id=subject,
-        grade=grade,
-        date=created_at
+        grade=grade_data.grade,
+        date=grade_data.created_at
     )
 
     return model_to_dict(grade)
 
 
 @router.patch("/{user_id}")
-async def change_role(user_id: int, role_id: int, current_user=Depends(auf_token)):
+async def change_role(
+    user_id: int, 
+    role_data: UserRoleUpdate,
+    current_user=Depends(auf_token)
+):
     current_user = get_user(current_user, key)
 
     if current_user.role.name != "admin":
@@ -94,7 +120,7 @@ async def change_role(user_id: int, role_id: int, current_user=Depends(auf_token
     if not user:
         raise HTTPException(404, "User not found")
 
-    user.role = role_id
+    user.role = role_data.role_id
     user.save()
 
-    return user
+    return model_to_dict(user)

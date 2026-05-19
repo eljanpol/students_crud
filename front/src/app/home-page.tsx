@@ -34,9 +34,7 @@ export const HomePage = () => {
                     <h2 className="border-b border-zinc-700 pb-5 pt-10 text-[#ffffff] text-center text-3xl font-bold tracking-tight mb-8 translate-x-7">
                     ㅤㅤНавигацияㅤㅤ
                     </h2>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]">Тест</Button>
+                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GetGrades")}>Посмотреть Оценки</Button>
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GradeSet")}>Форма выставления оценок</Button>
                     <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/admin")}>Админ-панель</Button>
                 </div>
