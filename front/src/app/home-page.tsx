@@ -6,22 +6,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu"
+import { useUserStore } from "./user-stor"
 
 
 export const HomePage = () => {
+    const userStor = useUserStore()
     const navigate = useNavigate()
     return (
         <div className="min-h-screen bg-[#0B0B0B]">
 
             <div className="overflow-hidden relative min-h-11 w-full flex items-top justify-center">
                 <div className="relative h-20 w-full bg-[#0B0B0B] flex justify-start">
-                    <div className="rounded-2xl bg-[#ffffff07] w-500 flex flex-row-reverse gap-4 items-center"> 
+                    <div className="overflow-hidden rounded-2xl bg-[#111111] relative h-20 w-full flex justify-end gap-4 items-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild className="bg-[#222222] hover:bg-[#303030] hover:text-white -translate-x-5 h-11 text-white">
-                                <Button>тут будет имя пользователя</Button>
+                                <Button>{userStor.user?.name}</Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent className="hover-bg-[#ffffff07] text-white cursor-pointer bg-[#171717]">
-                            <DropdownMenuItem onClick={() => navigate("/main/login")}>⇐ Выйти</DropdownMenuItem>
+                            <DropdownMenuContent className="text-white cursor-pointer bg-[#171717]">
+                                <DropdownMenuItem onClick={() => navigate("/main/login")} className="focus:bg-[#ffffff07] focus:text-white">⇐ Выйти</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -34,9 +36,26 @@ export const HomePage = () => {
                     <h2 className="border-b border-zinc-700 pb-5 pt-10 text-[#ffffff] text-center text-3xl font-bold tracking-tight mb-8 translate-x-7">
                     ㅤㅤНавигацияㅤㅤ
                     </h2>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GetGrades")}>Посмотреть Оценки</Button>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GradeSet")}>Форма выставления оценок</Button>
-                    <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/admin")}>Админ-панель</Button>
+                    {userStor.user && userStor.user.role == "1" && 
+                    <>
+                        <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GetGrades")}>Посмотреть Оценки</Button>
+                        <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GradeSet")}>Форма выставления оценок</Button>
+                        <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/admin")}>Админ-панель</Button>
+                    </>
+                    }
+
+                    {userStor.user && userStor.user.role == "2" && 
+                    <>
+                        <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GetGrades")}>Посмотреть Оценки</Button>
+                    </>
+                    }
+
+                    {userStor.user && userStor.user.role == "3" && 
+                    <>
+                        <Button className="w-82 h-11 bg-[#222222] text-[#ffffff] hover:bg-[#303030]" onClick={() => navigate("/main/GradeSet")}>Форма выставления оценок</Button>
+                    </>
+                    }
+                    
                 </div>
 
                 <div className="border rounded-2xl border-zinc-700 flex flex-col justify-start py-12 px-6 h-159 overflow-y-auto">

@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
 type UserStoretype = {
-    user: {name: string} | null
+    user: {id:string, name:string, role:string} | null
 
-    setUser: (user: {name: string}) => void
+    setUser: (user: {id:string, name:string, role:string}) => void
     remove: () => void
 }
 

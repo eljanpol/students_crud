@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { data, useNavigate } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../components/ui/dropdown-menu"
-// Импортируем компоненты таблицы Shadcn UI
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table"
+import { useUserStore } from "./user-stor"
+import { fetchWithBearer } from "../lib/api"
 
 // Описываем TypeScript типы под ваш JSON
 interface Subject {
@@ -35,10 +36,9 @@ export const GetGradesPage = () => {
     const [grades, setGrades] = useState<GradeRecord[]>([])
     const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState<string | null>(null)
-
-    // Запрос к API при загрузке страницы
+    const userStor = useUserStore()
     useEffect(() => {
-        fetch("http://127.0.0.1:8000/users/4/subjects")
+        fetchWithBearer(`http://127.0.0.1:8000/users/${userStor.user?.id}/subjects`)
             .then((res) => {
                 if (!res.ok) throw new Error("Не удалось загрузить данные")
                 return res.json()
@@ -59,7 +59,7 @@ export const GetGradesPage = () => {
             <div className="overflow-hidden rounded-2xl bg-[#111111] relative h-20 w-full flex justify-end gap-4 items-center">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild className="bg-[#222222] hover:bg-[#303030] hover:text-white -translate-x-5 h-11 text-white">
-                        <Button>тут будет имя пользователя</Button>
+                        <Button>{userStor.user?.name}</Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="text-white cursor-pointer bg-[#171717]">
                         <DropdownMenuItem onClick={() => navigate("/main/login")} className="focus:bg-[#ffffff07] focus:text-white">⇐ Выйти</DropdownMenuItem>
@@ -120,7 +120,7 @@ export const GetGradesPage = () => {
                                                 </TableCell>
 
                                                 <TableCell className="text-zinc-400 text-right">
-                                                    {new Date(record.date).toLocaleDateString("ru-RU")}
+                                                    {new Date().toLocaleDateString("ru-RU")}
                                                 </TableCell>
                                             </TableRow>
                                         ))
