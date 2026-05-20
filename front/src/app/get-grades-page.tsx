@@ -6,7 +6,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { useUserStore } from "./user-stor"
 import { fetchWithBearer } from "../lib/api"
 
-// Описываем TypeScript типы под ваш JSON
 interface Subject {
   id: number;
   name: string;
@@ -106,7 +105,6 @@ export const GetGradesPage = () => {
                                     ) : (
                                         grades.map((record) => (
                                             <TableRow key={record.id} className="border-b border-zinc-800/50 hover:bg-[#ffffff03]">
-                                                {/* Название предмета */}
                                                 <TableCell className="text-left font-medium">
                                                     {record.subject_id.name}
                                                 </TableCell>
