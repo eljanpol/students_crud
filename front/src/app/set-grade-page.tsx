@@ -24,8 +24,6 @@ const useSetGradePageVM  = () => {
             const sId = Number(subject);
             const gValue = Number(grade);
             const uId = Number(studentID);
-
-            // Генерируем текущую дату в формате YYYY-MM-DD
             const currentDate = new Date().toISOString();
 
             return fetchWithBearer(`http://127.0.0.1:8000/users/${uId}/grades`, {
@@ -78,7 +76,6 @@ export const SetGradePage = () => {
     return (
         <div className="min-h-screen bg-[#0B0B0B]">
 
-            {/* Шапка */}
             <div className="overflow-hidden rounded-2xl bg-[#111111] relative h-20 w-full flex justify-end gap-4 items-center">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild className="bg-[#222222] hover:bg-[#303030] hover:text-white -translate-x-5 h-11 text-white">
@@ -90,12 +87,10 @@ export const SetGradePage = () => {
                 </DropdownMenu>
             </div>
 
-            {/* Назад */}
             <div className="overflow-hidden relative min-h-10 w-30 flex items-top justify-start -translate-y-15 translate-x-5">
                 <Button onClick={() => navigate("/main/home")} className="h-11 bg-[#222222] hover:bg-[#303030]">Назад</Button>
             </div>
 
-            {/* Статус выполнения */}
             {message && (
                 <div className={`max-w-md mx-auto text-center p-3 rounded-xl mb-4 font-medium text-sm ${
                     message.isError ? "bg-red-500/10 text-red-400" : "bg-emerald-500/10 text-emerald-400"
@@ -104,7 +99,6 @@ export const SetGradePage = () => {
                 </div>
             )}
 
-            {/* Форма без ломающих translate классов */}
             <form className="overflow-hidden relative min-h-120 w-full flex items-top justify-center pb-20" onSubmit={onSubmit}>
                 <div className="relative rounded-2xl bg-[#111111] w-[440px] py-8 flex flex-col gap-4 items-center justify-start border border-zinc-800">
                     
