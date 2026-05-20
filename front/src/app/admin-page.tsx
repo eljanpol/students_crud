@@ -24,25 +24,21 @@ export const AdminPage = () => {
     const navigate = useNavigate()
     const [message, setMessage] = useState<{ text: string; isError: boolean } | null>(null)
 
-    // Формы для сбора данных
     const { register: registerRole, handleSubmit: handleRoleSubmit, control, reset: resetRole } = useForm<RoleForm>()
     const { register: registerSubject, handleSubmit: handleSubjectSubmit, reset: resetSubject } = useForm<SubjectForm>()
 
-    // 1. ИСПРАВЛЕНО: Мутация для смены роли (с явным приведением типов к Number)
     const assignRoleMutation = useMutation({
         mutationFn: ({ userId, roleId }: RoleForm) => {
             const uId = Number(userId);
             const rId = Number(roleId);
 
-            // Обратите внимание на метод: если в FastAPI написано @app.put, оставляем PUT. Если @app.patch, меняем на PATCH.
             return fetchWithBearer(`http://127.0.0.1:8000/users/${uId}`, {
                 method: "PATCH", 
                 headers: { 
                     'accept': 'application/json',
-                    // 1. ОБЯЗАТЕЛЬНО: указываем бэкенду, что отправляем JSON
                     'Content-Type': 'application/json' 
                 },
-                // 2. ИСПРАВЛЕНО: оборачиваем объект в JSON.stringify и передаем rId напрямую без лишних скобок
+
                 body: JSON.stringify({
                     role_id: rId 
                 })
@@ -63,7 +59,6 @@ export const AdminPage = () => {
         }
     })
 
-    // 2. ИСПРАВЛЕНО: Мутация для создания предмета (POST)
     const addSubjectMutation = useMutation({
         mutationFn: ({ subjectName }: SubjectForm) => {
             return fetchWithBearer(`http://127.0.0.1:8000/subjects`, {
@@ -72,7 +67,7 @@ export const AdminPage = () => {
                     'Content-Type': 'application/json',
                     'accept': 'application/json'
                 },
-                // Убедитесь, что в Pydantic-модели на бэкенде поле называется именно "name"
+
                 body: JSON.stringify({ name: subjectName }) 
             }).then(async (res) => {
                 if (!res.ok) {
@@ -93,7 +88,6 @@ export const AdminPage = () => {
 
     return (
         <div className="min-h-screen bg-[#0B0B0B]">
-            {/* Шапка */}
             <div className="overflow-hidden rounded-2xl bg-[#111111] relative h-20 w-full flex justify-end gap-4 items-center">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild className="bg-[#222222] hover:bg-[#303030] hover:text-white -translate-x-5 h-11 text-white">
@@ -105,12 +99,10 @@ export const AdminPage = () => {
                 </DropdownMenu>
             </div>
 
-            {/* Назад */}
             <div className="overflow-hidden relative min-h-10 w-30 flex items-top justify-start -translate-y-15 translate-x-5">
                 <Button onClick={() => navigate("/main/home")} className="h-11 bg-[#222222] hover:bg-[#303030]">Назад</Button>
             </div>
 
-            {/* Уведомления об успехе или ошибке */}
             {message && (
                 <div className={`max-w-md mx-auto text-center p-3 rounded-xl mb-4 font-medium text-sm ${
                     message.isError ? "bg-red-500/10 text-red-400" : "bg-emerald-500/10 text-emerald-400"
@@ -119,11 +111,9 @@ export const AdminPage = () => {
                 </div>
             )}
 
-            {/* Панель управления */}
             <div className="overflow-hidden relative min-h-130 w-full flex items-top justify-center pb-20">
                 <div className="relative rounded-2xl bg-[#111111] py-8 w-[480px] flex flex-col items-center justify-start border border-zinc-800">
-                    
-                    {/* СЕКЦИЯ 1: Назначение роли */}
+
                     <form onSubmit={handleRoleSubmit((data) => assignRoleMutation.mutate(data))} className="w-full flex flex-col items-center gap-4">
                         <h1 className="text-white text-lg font-bold">Выберите, кого хотите назначить:</h1>
                         <Input 
@@ -163,7 +153,6 @@ export const AdminPage = () => {
 
                     <Separator className="w-80 bg-zinc-800 my-6"/>
 
-                    {/* СЕКЦИЯ 2: Добавление предмета */}
                     <form onSubmit={handleSubjectSubmit((data) => addSubjectMutation.mutate(data))} className="w-full flex flex-col items-center gap-4">
                         <h1 className="text-white text-lg font-bold">Напишите название нового предмета:</h1>
                         <Input 
